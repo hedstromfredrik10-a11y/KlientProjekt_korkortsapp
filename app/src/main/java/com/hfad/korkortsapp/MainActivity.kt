@@ -2,7 +2,9 @@ package com.hfad.korkortsapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.collection.mutableLongListOf
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.database.FirebaseDatabase
 import com.hfad.korkortsapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -29,13 +31,33 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
     private fun getDataFromFirebase() {
-        quizModelList.add(QuizModel("1", "Skyltar", "Allt om skyltar", "15"))
-        quizModelList.add(QuizModel("2", "Miljö", "Allt om miljö", "15"))
-        quizModelList.add(QuizModel("3", "Bilen", "Allt om bilen", "15"))
-        setUpRecyclerView()
+        //Bestäm frågorna
 
+//        FirebaseDatabase.getInstance().reference
+//            .get()
+//            .addOnSuccessListener { dataSnapshot ->
+//                if (dataSnapshot.exists()) {
+//                    for (snapshot in dataSnapshot.children) {
+//                        val quizModel = snapshot.getValue(QuizModel::class.java)
+//                        if (quizModel != null) {
+//                            quizModelList.add(quizModel)
+//                        }
+//                    }
+//                }
+//                setUpRecyclerView()
+//            }
+
+
+        val listQuestionModel = mutableListOf<QuestionModel>()
+        listQuestionModel.add(QuestionModel("Fråga 1", mutableListOf("1", "2", "3", "4"), "3"))
+        listQuestionModel.add(QuestionModel("Fråga 2", mutableListOf("1", "2", "3", "4"), "3"))
+        listQuestionModel.add(QuestionModel("Fråga 3", mutableListOf("1", "2", "3", "4"), "3"))
+        listQuestionModel.add(QuestionModel("Fråga 4", mutableListOf("1", "2", "3", "4"), "3"))
+
+        quizModelList.add(QuizModel("1", "Skyltar", "Allt om skyltar", "20", listQuestionModel))
+
+        setUpRecyclerView()
     }
 
 
