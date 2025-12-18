@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity() {
 //            }
 
 
-
         val listQuestionModel = mutableListOf<QuestionModel>()
         listQuestionModel.add(QuestionModel("Fråga 1", mutableListOf("1", "2", "3", "4"), "3"))
         listQuestionModel.add(QuestionModel("Fråga 2", mutableListOf("1", "2", "3", "4"), "3"))
