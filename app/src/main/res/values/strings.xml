@@ -2,4 +2,9 @@
     <string name="app_name">KorkortsApp</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="korkortsquiz">Körkortsquiz</string>
+    <string name="Underrubrik">För fan</string>
+    <string name="alla_amnen">Alla ämnen</string>
+    <string name="next">Next</string>
+    <string name="avsluta">Avsluta</string>
 </resources>

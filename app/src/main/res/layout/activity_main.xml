@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:letterSpacing="0.1"
-            android:text="Körkortsquiz"
+            android:text="@string/korkortsquiz"
             android:textColor="@color/white"
             android:textSize="34sp"
             android:textStyle="bold" />
@@ -41,7 +41,7 @@
             android:layout_margin="16dp"
             android:gravity="center"
             android:letterSpacing="0.1"
-            android:text="För fan"
+            android:text="@string/Underrubrik"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginTop="16dp"
-        android:text="Alla ämnen"
+        android:text="@string/alla_amnen"
         android:textSize="20sp"
         android:textStyle="bold" />
 
