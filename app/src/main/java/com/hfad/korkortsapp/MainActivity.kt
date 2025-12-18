@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.mutableLongListOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.firestore.FirebaseFirestore
 import com.hfad.korkortsapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -35,35 +34,12 @@ class MainActivity : AppCompatActivity() {
     private fun getDataFromFirebase() {
         //Bestäm frågorna
 
-//        FirebaseDatabase.getInstance().reference
-//            .get()
-//            .addOnSuccessListener { dataSnapshot ->
-//                if (dataSnapshot.exists()) {
-//                    for (snapshot in dataSnapshot.children) {
-//                        val quizModel = snapshot.getValue(QuizModel::class.java)
-//                        if (quizModel != null) {
-//                            quizModelList.add(quizModel)
-//                        }
-//                    }
-//                }
-//                setUpRecyclerView()
-//            }
-
-        var categoryId = "trafik"
-        FirebaseFirestore.getInstance().collection("Categories").document(categoryId)
-            .collection("questions")
-            .whereEqualTo("order", 1).get()
+        FirebaseDatabase.getInstance().reference
+            .get()
             .addOnSuccessListener { dataSnapshot ->
-                if (!dataSnapshot.isEmpty) {
-                    for (snapshot in dataSnapshot.documents) {
-                        val q = snapshot?.toObject(QuestionModel::class.java)
-                        val listQuestionModel = mutableListOf<QuestionModel>()
-//                        constructor() : this("", emptyList(), 0, 0, "")
-                        listQuestionModel.add(QuestionModel(q?.text ?: "",
-                            q?.options ?: mutableListOf(), q?.correctIndex ?: 0, q?.order ?: 1, q?.imagePath
-                        ))
-
-                        val quizModel = QuizModel(1, "hej", "000", listQuestionModel)
+                if (dataSnapshot.exists()) {
+                    for (snapshot in dataSnapshot.children) {
+                        val quizModel = snapshot.getValue(QuizModel::class.java)
                         if (quizModel != null) {
                             quizModelList.add(quizModel)
                         }
@@ -73,13 +49,13 @@ class MainActivity : AppCompatActivity() {
             }
 
 //        val listQuestionModel = mutableListOf<QuestionModel>()
-//        listQuestionModel.add(QuestionModel("Fråga 1", mutableListOf("1", "2", "3", "4"), 3))
+//        listQuestionModel.add(QuestionModel("Fråga 1", mutableListOf("1", "2", "3", "4"), "3"))
 //        listQuestionModel.add(QuestionModel("Fråga 2", mutableListOf("1", "2", "3", "4"), "3"))
 //        listQuestionModel.add(QuestionModel("Fråga 3", mutableListOf("1", "2", "3", "4"), "3"))
 //        listQuestionModel.add(QuestionModel("Fråga 4", mutableListOf("1", "2", "3", "4"), "3"))
 //
-//        quizModelList.add(QuizModel(1, "Skyltar", "20", listQuestionModel))
-
+//        quizModelList.add(QuizModel("1", "Skyltar", "Allt om skyltar", "20", listQuestionModel))
+//
 //        setUpRecyclerView()
     }
 

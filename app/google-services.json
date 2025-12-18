@@ -1,33 +1,14 @@
 {
   "project_info": {
-    "project_number": "792202397512",
-    "firebase_url": "https://klient-projekt-default-rtdb.europe-west1.firebasedatabase.app",
-    "project_id": "klient-projekt",
-    "storage_bucket": "klient-projekt.firebasestorage.app"
+    "project_number": "1007992543212",
+    "firebase_url": "https://questions-476aa-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "questions-476aa",
+    "storage_bucket": "questions-476aa.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:792202397512:android:e7da469f487b9c35f5d57d",
-        "android_client_info": {
-          "package_name": "com.example.firebasechat"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAVxNG2AQjp2vpoKrUDNg_EZtIso612-4I"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:792202397512:android:ef1025fe425974caf5d57d",
+        "mobilesdk_app_id": "1:1007992543212:android:70e5abbb8c07d85c9152c9",
         "android_client_info": {
           "package_name": "com.hfad.korkortsapp"
         }
@@ -35,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAVxNG2AQjp2vpoKrUDNg_EZtIso612-4I"
+          "current_key": "AIzaSyAYyd-2bjbdCE-FZ5ihsVs7Q30ekmPi7vU"
         }
       ],
       "services": {
