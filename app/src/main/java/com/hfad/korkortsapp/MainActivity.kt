@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.mutableLongListOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.hfad.korkortsapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -48,15 +49,31 @@ class MainActivity : AppCompatActivity() {
 //                setUpRecyclerView()
 //            }
 
+        var categoryId = "trafik"
+        FirebaseFirestore.getInstance().collection("Categories").document(categoryId)
+            .collection("questions")
+            .whereEqualTo("order", 1).get()
+            .addOnSuccessListener { dataSnapshot ->
+                if (!dataSnapshot.isEmpty) {
+                    for (snapshot in dataSnapshot.documents) {
+                        val quizModel = snapshot?.toObject(QuizModel::class.java)
+                        if (quizModel != null) {
+                            quizModelList.add(quizModel)
+                        }
+                    }
+                }
+                setUpRecyclerView()
+            }
+
         val listQuestionModel = mutableListOf<QuestionModel>()
-        listQuestionModel.add(QuestionModel("Fråga 1", mutableListOf("1", "2", "3", "4"), "3"))
-        listQuestionModel.add(QuestionModel("Fråga 2", mutableListOf("1", "2", "3", "4"), "3"))
-        listQuestionModel.add(QuestionModel("Fråga 3", mutableListOf("1", "2", "3", "4"), "3"))
-        listQuestionModel.add(QuestionModel("Fråga 4", mutableListOf("1", "2", "3", "4"), "3"))
+        listQuestionModel.add(QuestionModel("Fråga 1", mutableListOf("1", "2", "3", "4"), 3))
+//        listQuestionModel.add(QuestionModel("Fråga 2", mutableListOf("1", "2", "3", "4"), "3"))
+//        listQuestionModel.add(QuestionModel("Fråga 3", mutableListOf("1", "2", "3", "4"), "3"))
+//        listQuestionModel.add(QuestionModel("Fråga 4", mutableListOf("1", "2", "3", "4"), "3"))
+//
+        quizModelList.add(QuizModel(1, "Skyltar", "20", listQuestionModel))
 
-        quizModelList.add(QuizModel("1", "Skyltar", "Allt om skyltar", "20", listQuestionModel))
-
-        setUpRecyclerView()
+//        setUpRecyclerView()
     }
 
 

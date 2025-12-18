@@ -20,7 +20,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var binding: ActivityQuizBinding
 
     var currentQuestionIndex = 0;
-    var selectedAnswer = ""
+    var selectedAnswer = 0
     var score = 0;
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +60,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
 
     //Laddar frågorna
     private fun loadQuestions() {
-        selectedAnswer = ""
+        selectedAnswer = 0
         if (currentQuestionIndex == questionModelList.size) {
             finishQuiz()
             return
@@ -73,7 +73,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
             //Visar progress bar
             questionProgressIndicator.progress =
                 (currentQuestionIndex.toFloat() / questionModelList.size.toFloat() * 100).toInt()
-            questionTextview.text = questionModelList[currentQuestionIndex].question
+            questionTextview.text = questionModelList[currentQuestionIndex].text
             btn0.text = questionModelList[currentQuestionIndex].options[0]
             btn1.text = questionModelList[currentQuestionIndex].options[1]
             btn2.text = questionModelList[currentQuestionIndex].options[2]
@@ -95,7 +95,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
 
         if (clickedBtn.id == R.id.next_btn) {
             //Kontrollerar om svaret är korrekt
-            if (selectedAnswer == questionModelList[currentQuestionIndex].correct) {
+            if (selectedAnswer == questionModelList[currentQuestionIndex].correctIndex) {
                 score++
                 Log.i("Poäng", score.toString())
             }
@@ -105,7 +105,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
             loadQuestions()
         } else {
             //Om man trycker på en alternativ
-            selectedAnswer = clickedBtn.text.toString()
+            selectedAnswer = 0
             clickedBtn.setBackgroundColor(getColor(R.color.orange))
         }
 
