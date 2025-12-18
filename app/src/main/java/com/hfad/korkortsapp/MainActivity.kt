@@ -46,6 +46,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 setUpRecyclerView()
+                //dett är en ändring
             }
 
 //        val listQuestionModel = mutableListOf<QuestionModel>()
