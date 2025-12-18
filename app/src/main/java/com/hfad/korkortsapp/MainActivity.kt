@@ -1,63 +1,28 @@
 package com.hfad.korkortsapp
 
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.collection.mutableLongListOf
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.database.FirebaseDatabase
-import com.hfad.korkortsapp.databinding.ActivityMainBinding
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
-    lateinit var quizModelList: MutableList<QuizModel>
-    lateinit var adapter: QuizListAdapter
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_main)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
-        quizModelList = mutableListOf()
-        getDataFromFirebase()
+        val db = FirebaseFirestore.getInstance()
+
+
+
 
 
     }
-
-    private fun setUpRecyclerView() {
-        adapter = QuizListAdapter(quizModelList)
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.adapter = adapter
-
-    }
-
-    private fun getDataFromFirebase() {
-        //Bestäm frågorna
-
-//        FirebaseDatabase.getInstance().reference
-//            .get()
-//            .addOnSuccessListener { dataSnapshot ->
-//                if (dataSnapshot.exists()) {
-//                    for (snapshot in dataSnapshot.children) {
-//                        val quizModel = snapshot.getValue(QuizModel::class.java)
-//                        if (quizModel != null) {
-//                            quizModelList.add(quizModel)
-//                        }
-//                    }
-//                }
-//                setUpRecyclerView()
-//            }
-
-        val listQuestionModel = mutableListOf<QuestionModel>()
-        listQuestionModel.add(QuestionModel("Fråga 1", mutableListOf("1", "2", "3", "4"), "3"))
-        listQuestionModel.add(QuestionModel("Fråga 2", mutableListOf("1", "2", "3", "4"), "3"))
-        listQuestionModel.add(QuestionModel("Fråga 3", mutableListOf("1", "2", "3", "4"), "3"))
-        listQuestionModel.add(QuestionModel("Fråga 4", mutableListOf("1", "2", "3", "4"), "3"))
-
-        quizModelList.add(QuizModel("1", "Skyltar", "Allt om skyltar", "20", listQuestionModel))
-
-        setUpRecyclerView()
-    }
-
-
 }
