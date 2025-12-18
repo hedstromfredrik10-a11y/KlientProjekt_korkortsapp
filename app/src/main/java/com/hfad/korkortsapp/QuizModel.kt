@@ -1,5 +1,7 @@
 package com.hfad.korkortsapp
 
+import androidx.credentials.exceptions.domerrors.OptOutError
+
 //import android.R
 
 data class QuizModel(
@@ -25,7 +27,7 @@ data class QuestionModel(
 //    val options: List<String>,
 //    val correct: String
 ) {
-//    constructor() : this("", emptyList(), "")
+    constructor() : this("", emptyList(), 0, 0, "")
 }
 
 

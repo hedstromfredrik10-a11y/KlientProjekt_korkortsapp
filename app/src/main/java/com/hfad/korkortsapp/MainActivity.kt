@@ -56,7 +56,14 @@ class MainActivity : AppCompatActivity() {
             .addOnSuccessListener { dataSnapshot ->
                 if (!dataSnapshot.isEmpty) {
                     for (snapshot in dataSnapshot.documents) {
-                        val quizModel = snapshot?.toObject(QuizModel::class.java)
+                        val q = snapshot?.toObject(QuestionModel::class.java)
+                        val listQuestionModel = mutableListOf<QuestionModel>()
+//                        constructor() : this("", emptyList(), 0, 0, "")
+                        listQuestionModel.add(QuestionModel(q?.text ?: "",
+                            q?.options ?: mutableListOf(), q?.correctIndex ?: 0, q?.order ?: 1, q?.imagePath
+                        ))
+
+                        val quizModel = QuizModel(1, "hej", "000", listQuestionModel)
                         if (quizModel != null) {
                             quizModelList.add(quizModel)
                         }
@@ -65,13 +72,13 @@ class MainActivity : AppCompatActivity() {
                 setUpRecyclerView()
             }
 
-        val listQuestionModel = mutableListOf<QuestionModel>()
-        listQuestionModel.add(QuestionModel("Fråga 1", mutableListOf("1", "2", "3", "4"), 3))
+//        val listQuestionModel = mutableListOf<QuestionModel>()
+//        listQuestionModel.add(QuestionModel("Fråga 1", mutableListOf("1", "2", "3", "4"), 3))
 //        listQuestionModel.add(QuestionModel("Fråga 2", mutableListOf("1", "2", "3", "4"), "3"))
 //        listQuestionModel.add(QuestionModel("Fråga 3", mutableListOf("1", "2", "3", "4"), "3"))
 //        listQuestionModel.add(QuestionModel("Fråga 4", mutableListOf("1", "2", "3", "4"), "3"))
 //
-        quizModelList.add(QuizModel(1, "Skyltar", "20", listQuestionModel))
+//        quizModelList.add(QuizModel(1, "Skyltar", "20", listQuestionModel))
 
 //        setUpRecyclerView()
     }
