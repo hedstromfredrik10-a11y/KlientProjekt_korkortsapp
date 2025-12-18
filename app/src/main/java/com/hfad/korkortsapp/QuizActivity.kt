@@ -20,7 +20,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var binding: ActivityQuizBinding
 
     var currentQuestionIndex = 0;
-    var selectedAnswer = 0
+    var selectedAnswer = ""
     var score = 0;
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +60,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
 
     //Laddar frågorna
     private fun loadQuestions() {
-        selectedAnswer = 0
+        selectedAnswer = ""
         if (currentQuestionIndex == questionModelList.size) {
             finishQuiz()
             return
@@ -73,7 +73,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
             //Visar progress bar
             questionProgressIndicator.progress =
                 (currentQuestionIndex.toFloat() / questionModelList.size.toFloat() * 100).toInt()
-            questionTextview.text = questionModelList[currentQuestionIndex].text
+            questionTextview.text = questionModelList[currentQuestionIndex].question
             btn0.text = questionModelList[currentQuestionIndex].options[0]
             btn1.text = questionModelList[currentQuestionIndex].options[1]
             btn2.text = questionModelList[currentQuestionIndex].options[2]
@@ -95,7 +95,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
 
         if (clickedBtn.id == R.id.next_btn) {
             //Kontrollerar om svaret är korrekt
-            if (selectedAnswer == questionModelList[currentQuestionIndex].correctIndex) {
+            if (selectedAnswer == questionModelList[currentQuestionIndex].correct) {
                 score++
                 Log.i("Poäng", score.toString())
             }
@@ -105,7 +105,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
             loadQuestions()
         } else {
             //Om man trycker på en alternativ
-            selectedAnswer = 0
+            selectedAnswer = ""
             clickedBtn.setBackgroundColor(getColor(R.color.orange))
         }
 
