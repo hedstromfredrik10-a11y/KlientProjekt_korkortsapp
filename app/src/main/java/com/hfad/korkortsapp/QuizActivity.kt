@@ -105,7 +105,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
             loadQuestions()
         } else {
             //Om man trycker på en alternativ
-            selectedAnswer = ""
+            selectedAnswer = clickedBtn.text.toString()
             clickedBtn.setBackgroundColor(getColor(R.color.orange))
         }
 
