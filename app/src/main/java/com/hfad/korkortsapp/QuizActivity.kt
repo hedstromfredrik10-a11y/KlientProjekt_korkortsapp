@@ -22,6 +22,8 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
     var currentQuestionIndex = 0;
     var selectedAnswer = ""
     var score = 0;
+    val list = mutableListOf<Int>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +36,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
             btn2.setOnClickListener(this@QuizActivity)
             btn3.setOnClickListener(this@QuizActivity)
             nextBtn.setOnClickListener(this@QuizActivity)
+            backBtn.setOnClickListener(this@QuizActivity)
         }
         loadQuestions()
         startTimer()
@@ -88,7 +91,6 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
             btn1.setBackgroundColor(getColor(R.color.gray))
             btn2.setBackgroundColor(getColor(R.color.gray))
             btn3.setBackgroundColor(getColor(R.color.gray))
-
         }
 
         val clickedBtn = view as Button
@@ -97,18 +99,36 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
             //Kontrollerar om svaret är korrekt
             if (selectedAnswer == questionModelList[currentQuestionIndex].correct) {
                 score++
+                list.add(1)
                 Log.i("Poäng", score.toString())
+            }
+            else {
+                list.add(0)
             }
 
             //Om man trycker på next
             currentQuestionIndex++
             loadQuestions()
-        } else {
+        }
+        else if (clickedBtn.id  == R.id.back_btn) {
+            if (currentQuestionIndex == 0) {
+                return
+            }
+
+            currentQuestionIndex--
+
+            if (list.get(currentQuestionIndex) == 1 ) {
+                score--
+            }
+
+            loadQuestions()
+        }
+        else {
             //Om man trycker på en alternativ
             selectedAnswer = clickedBtn.text.toString()
             clickedBtn.setBackgroundColor(getColor(R.color.orange))
         }
-
+            Log.i("Poäng",currentQuestionIndex.toString())
 
     }
 
