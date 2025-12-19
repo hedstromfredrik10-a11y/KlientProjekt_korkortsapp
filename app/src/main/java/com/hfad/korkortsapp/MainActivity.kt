@@ -1,17 +1,18 @@
 package com.hfad.korkortsapp
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.collection.mutableLongListOf
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.FirebaseDatabase
 import com.hfad.korkortsapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
-    lateinit var quizModelList: MutableList<QuizModel>
-    lateinit var adapter: QuizListAdapter
 
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var quizModelList: MutableList<QuizModel>
+    private lateinit var adapter: QuizListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,22 +22,38 @@ class MainActivity : AppCompatActivity() {
         quizModelList = mutableListOf()
         getDataFromFirebase()
 
+        showHome()
 
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+
+                R.id.home -> {
+                    showHome()
+                    true
+                }
+
+                R.id.leaderboard -> {
+                    showLeaderboard()
+                    true
+                }
+
+                else -> false
+            }
+        }
     }
 
     private fun setUpRecyclerView() {
         adapter = QuizListAdapter(quizModelList)
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
-
     }
 
     private fun getDataFromFirebase() {
-        //Bestäm frågorna
-
         FirebaseDatabase.getInstance().reference
             .get()
             .addOnSuccessListener { dataSnapshot ->
+                quizModelList.clear()
+
                 if (dataSnapshot.exists()) {
                     for (snapshot in dataSnapshot.children) {
                         val quizModel = snapshot.getValue(QuizModel::class.java)
@@ -46,10 +63,30 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 setUpRecyclerView()
-                //dett är en ändring
             }
-        
     }
 
+    private fun showHome() {
 
+        binding.contentLayout.visibility = View.VISIBLE
+
+        supportFragmentManager.findFragmentById(R.id.fragmentContainer)?.let {
+            supportFragmentManager.beginTransaction()
+                .remove(it)
+                .commit()
+        }
+    }
+
+    private fun showLeaderboard() {
+
+        binding.contentLayout.visibility = View.GONE
+
+        openFragment(LeaderBoard())
+    }
+
+    private fun openFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fragment)
+            .commit()
+    }
 }
