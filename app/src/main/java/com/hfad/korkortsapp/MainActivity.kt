@@ -48,16 +48,7 @@ class MainActivity : AppCompatActivity() {
                 setUpRecyclerView()
                 //dett är en ändring
             }
-
-//        val listQuestionModel = mutableListOf<QuestionModel>()
-//        listQuestionModel.add(QuestionModel("Fråga 1", mutableListOf("1", "2", "3", "4"), "3"))
-//        listQuestionModel.add(QuestionModel("Fråga 2", mutableListOf("1", "2", "3", "4"), "3"))
-//        listQuestionModel.add(QuestionModel("Fråga 3", mutableListOf("1", "2", "3", "4"), "3"))
-//        listQuestionModel.add(QuestionModel("Fråga 4", mutableListOf("1", "2", "3", "4"), "3"))
-//
-//        quizModelList.add(QuizModel("1", "Skyltar", "Allt om skyltar", "20", listQuestionModel))
-//
-//        setUpRecyclerView()
+        
     }
 
 
