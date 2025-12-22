@@ -49,11 +49,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getDataFromFirebase() {
-        FirebaseDatabase.getInstance().reference
+        FirebaseDatabase.getInstance()
+            .getReference("quizes")
             .get()
             .addOnSuccessListener { dataSnapshot ->
                 quizModelList.clear()
-
                 if (dataSnapshot.exists()) {
                     for (snapshot in dataSnapshot.children) {
                         val quizModel = snapshot.getValue(QuizModel::class.java)
