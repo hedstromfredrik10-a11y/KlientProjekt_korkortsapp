@@ -140,8 +140,8 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         val totalQuestions = questionModelList.size
         val percentage = ((score.toFloat() / totalQuestions.toFloat()) * 100).toInt()
 
-        val userId = "testUser"      // byt sen till FirebaseAuth uid
-        val username = "Test"        // byt sen till riktig username
+        val userId = UserSession.getOrCreateUserId(this)
+        val username = UserSession.getUsername(this) ?: "Okänd"
 
         repo.saveQuizResult(
             quizId = quizId,

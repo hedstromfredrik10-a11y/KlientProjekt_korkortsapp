@@ -22,7 +22,12 @@ class MainActivity : AppCompatActivity() {
         quizModelList = mutableListOf()
         getDataFromFirebase()
 
-        showHome()
+        // Visa login som första skärm när appen startar
+        binding.contentLayout.visibility = View.GONE
+        openFragment(LoginFragment {
+            // När användaren sparat namn:
+            showHome()
+        })
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -67,7 +72,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showHome() {
-
         binding.contentLayout.visibility = View.VISIBLE
 
         supportFragmentManager.findFragmentById(R.id.fragmentContainer)?.let {
@@ -78,9 +82,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showLeaderboard() {
-
         binding.contentLayout.visibility = View.GONE
-
         openFragment(LeaderBoard())
     }
 
