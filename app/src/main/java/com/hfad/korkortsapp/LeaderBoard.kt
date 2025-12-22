@@ -1,36 +1,57 @@
+package com.hfad.korkortsapp
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.hfad.korkortsapp.LeaderBoardItem
-import com.hfad.korkortsapp.R
+import com.google.firebase.database.ValueEventListener
 
 class LeaderBoard : Fragment() {
+
+    private val repo = QuizRepository()
+    private var top10Listener: ValueEventListener? = null
+
+    private lateinit var recyclerView: RecyclerView
+
+    private val QUIZ_ID = "1"  // ÄNDRA om ditt Quiz faktiskt har annat id
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         val view = inflater.inflate(R.layout.fragment_leader_board, container, false)
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.leaderboardRecyclerView)
+        recyclerView = view.findViewById(R.id.leaderboardRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-        // Exempeldata (ersätt med riktig data från quizet)
-        val leaderboardData = listOf(
-            LeaderBoardItem("Anna", 8),
-            LeaderBoardItem("Erik", 6),
-            LeaderBoardItem("Sara", 10)
-        )
-
-        recyclerView.adapter = LeaderBoardAdapter(leaderboardData)
+        recyclerView.adapter = LeaderBoardAdapter(emptyList())
 
         return view
     }
+
+    override fun onStart() {
+        super.onStart()
+
+        // Lyssna på top 10 i quizResults}
+        top10Listener = repo.listenTop10(
+            quizId = QUIZ_ID,
+            onUpdate = { pairs ->
+                val items = pairs.map { (_, model) ->
+                    LeaderBoardItem(
+                        userName = model.username.ifBlank { "Okänd" },
+                        score = model.score
+                    )
+                }
+                recyclerView.adapter = LeaderBoardAdapter(items)
+            }
+        )
+    }
+
+    override fun onStop() {
+        super.onStop()
+    }
 }
+

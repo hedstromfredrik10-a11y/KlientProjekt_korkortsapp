@@ -12,6 +12,9 @@ import com.hfad.korkortsapp.databinding.ActivityQuizBinding
 import com.hfad.korkortsapp.databinding.ScoreDialogBinding
 
 class QuizActivity : AppCompatActivity(), View.OnClickListener {
+
+    private val repo = QuizRepository()
+    private var quizId: String = ""
     companion object {
         var questionModelList: List<QuestionModel> = listOf()
         var time: String = ""
@@ -27,6 +30,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        quizId = intent.getStringExtra("QUIZ_ID") ?: ""
         binding = ActivityQuizBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -135,6 +139,18 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
     private fun finishQuiz() {
         val totalQuestions = questionModelList.size
         val percentage = ((score.toFloat() / totalQuestions.toFloat()) * 100).toInt()
+
+        val userId = "testUser"      // byt sen till FirebaseAuth uid
+        val username = "Test"        // byt sen till riktig username
+
+        repo.saveQuizResult(
+            quizId = quizId,
+            userId = userId,
+            username = username,
+            score = score,
+            onSuccess = { Log.d("QUIZ", "Resultat sparat") },
+            onError = { Log.e("QUIZ", "Kunde inte spara: ${it.message}") }
+        )
 
         val dialogBinding = ScoreDialogBinding.inflate(layoutInflater)
         dialogBinding.apply {
