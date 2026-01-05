@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity(), LoginFragment.Listener {
 
         UserSession.clear(this)
         binding.contentLayout.visibility = View.GONE
+        binding.bottomNavigation.visibility = View.GONE
         openFragment(LoginFragment())
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
@@ -63,6 +64,7 @@ class MainActivity : AppCompatActivity(), LoginFragment.Listener {
 
     private fun showHome() {
         binding.contentLayout.visibility = View.VISIBLE
+        binding.bottomNavigation.visibility = View.VISIBLE
         supportFragmentManager.findFragmentById(R.id.fragmentContainer)?.let {
             supportFragmentManager.beginTransaction().remove(it).commit()
         }

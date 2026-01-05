@@ -1,12 +1,10 @@
 <resources>
     <string name="app_name">KorkortsApp</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="korkortsquiz">Körkortsquiz</string>
-    <string name="Underrubrik">För fan</string>
+    <string name="korkortsquiz">KörkortsQuiz</string>
+    <string name="Underrubrik">Välj Kategori</string>
     <string name="alla_amnen">Alla ämnen</string>
-    <string name="next">Next</string>
+    <string name="next">Nästa</string>
     <string name="avsluta">Avsluta</string>
-    <string name="back">Back</string>
+    <string name="back">Backa</string>
     <string name="leaderboard">🏆 Leaderboard</string>
 </resources>
