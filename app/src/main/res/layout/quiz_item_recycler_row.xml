@@ -44,10 +44,12 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/klocka"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/timer"
-                android:tint="@color/orange" />
+                app:tint="@color/orange"
+                />
 
             <TextView
                 android:id="@+id/quiz_time_text"

@@ -56,6 +56,10 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
                 val remainingSeconds = seconds % 60
                 binding.timerIndicatorTextview.text =
                     String.format("%02d:%02d", minutes, remainingSeconds)
+                var tiden = binding.timerIndicatorTextview.text
+                if(tiden == "00:00") {
+                    finishQuiz()
+                }
             }
 
             override fun onFinish() {
@@ -147,6 +151,12 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
             scoreProgressIndicator.progress = percentage
             scoreProgressText.text = "$percentage %"
 
+            var tiden = binding.timerIndicatorTextview.text
+            if(tiden == "00:00") {
+                scoreTitle.text = "Tiden gick ut"
+                scoreTitle.setTextColor(Color.RED)
+            }
+
             if (percentage > 60) {
                 scoreTitle.text = "Grattis! Du klarade provet"
                 scoreTitle.setTextColor(Color.GREEN)
@@ -164,4 +174,5 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
             .setCancelable(false)
             .show()
     }
+
 }
