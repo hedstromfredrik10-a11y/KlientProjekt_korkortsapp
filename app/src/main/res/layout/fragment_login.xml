@@ -10,7 +10,7 @@
         android:id="@+id/loginTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Välj användarnamn"
+        android:text="Logga in / Skapa konto"
         android:textSize="24sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,14 +27,35 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"/>
 
-    <Button
-        android:id="@+id/saveUsernameBtn"
+    <EditText
+        android:id="@+id/passwordInput"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Starta"
+        android:hint="Lösenord"
+        android:inputType="textPassword"
         app:layout_constraintTop_toBottomOf="@id/usernameInput"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp"/>
+
+    <Button
+        android:id="@+id/loginBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Logga in"
+        app:layout_constraintTop_toBottomOf="@id/passwordInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/registerBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Skapa konto"
+        app:layout_constraintTop_toBottomOf="@id/loginBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

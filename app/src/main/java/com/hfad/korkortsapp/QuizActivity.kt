@@ -15,18 +15,18 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
 
     private val repo = QuizRepository()
     private var quizId: String = ""
+
     companion object {
         var questionModelList: List<QuestionModel> = listOf()
         var time: String = ""
     }
 
-    lateinit var binding: ActivityQuizBinding
+    private lateinit var binding: ActivityQuizBinding
 
-    var currentQuestionIndex = 0;
-    var selectedAnswer = ""
-    var score = 0;
-    val list = mutableListOf<Int>()
-
+    private var currentQuestionIndex = 0
+    private var selectedAnswer = ""
+    private var score = 0
+    private val list = mutableListOf<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +42,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
             nextBtn.setOnClickListener(this@QuizActivity)
             backBtn.setOnClickListener(this@QuizActivity)
         }
+
         loadQuestions()
         startTimer()
     }
@@ -58,14 +59,12 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             override fun onFinish() {
-
-
+                // valfritt: auto-avsluta quiz här
+                // finishQuiz()
             }
-
         }.start()
     }
 
-    //Laddar frågorna
     private fun loadQuestions() {
         selectedAnswer = ""
         if (currentQuestionIndex == questionModelList.size) {
@@ -74,12 +73,12 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         binding.apply {
-            //Visar hur många frågor som är besvarade
             questionIndicatorTextview.text =
                 "Fråga ${currentQuestionIndex + 1} av ${questionModelList.size} "
-            //Visar progress bar
+
             questionProgressIndicator.progress =
                 (currentQuestionIndex.toFloat() / questionModelList.size.toFloat() * 100).toInt()
+
             questionTextview.text = questionModelList[currentQuestionIndex].question
             btn0.text = questionModelList[currentQuestionIndex].options[0]
             btn1.text = questionModelList[currentQuestionIndex].options[1]
@@ -89,7 +88,6 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(view: View?) {
-
         binding.apply {
             btn0.setBackgroundColor(getColor(R.color.gray))
             btn1.setBackgroundColor(getColor(R.color.gray))
@@ -100,48 +98,40 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         val clickedBtn = view as Button
 
         if (clickedBtn.id == R.id.next_btn) {
-            //Kontrollerar om svaret är korrekt
             if (selectedAnswer == questionModelList[currentQuestionIndex].correct) {
                 score++
                 list.add(1)
                 Log.i("Poäng", score.toString())
-            }
-            else {
+            } else {
                 list.add(0)
             }
 
-            //Om man trycker på next
             currentQuestionIndex++
             loadQuestions()
-        }
-        else if (clickedBtn.id  == R.id.back_btn) {
-            if (currentQuestionIndex == 0) {
-                return
-            }
+        } else if (clickedBtn.id == R.id.back_btn) {
+            if (currentQuestionIndex == 0) return
 
             currentQuestionIndex--
 
-            if (list.get(currentQuestionIndex) == 1 ) {
+            if (list[currentQuestionIndex] == 1) {
                 score--
             }
 
             loadQuestions()
-        }
-        else {
-            //Om man trycker på en alternativ
+        } else {
             selectedAnswer = clickedBtn.text.toString()
             clickedBtn.setBackgroundColor(getColor(R.color.orange))
         }
-            Log.i("Poäng",currentQuestionIndex.toString())
 
+        Log.i("Poäng", currentQuestionIndex.toString())
     }
 
     private fun finishQuiz() {
         val totalQuestions = questionModelList.size
         val percentage = ((score.toFloat() / totalQuestions.toFloat()) * 100).toInt()
 
-        val userId = UserSession.getOrCreateUserId(this)
-        val username = UserSession.getUsername(this) ?: "Okänd"
+        val username = UserSession.getUsername(this) ?: "okand"
+        val userId = username
 
         repo.saveQuizResult(
             quizId = quizId,
@@ -156,6 +146,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         dialogBinding.apply {
             scoreProgressIndicator.progress = percentage
             scoreProgressText.text = "$percentage %"
+
             if (percentage > 60) {
                 scoreTitle.text = "Grattis! Du klarade provet"
                 scoreTitle.setTextColor(Color.GREEN)
@@ -163,13 +154,11 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
                 scoreTitle.text = "Inte godkänt"
                 scoreTitle.setTextColor(Color.RED)
             }
+
             scoreSubtitle.text = "$score av $totalQuestions är korrekt"
-            finishBtn.setOnClickListener {
-                finish()
-            }
-
-
+            finishBtn.setOnClickListener { finish() }
         }
+
         AlertDialog.Builder(this)
             .setView(dialogBinding.root)
             .setCancelable(false)

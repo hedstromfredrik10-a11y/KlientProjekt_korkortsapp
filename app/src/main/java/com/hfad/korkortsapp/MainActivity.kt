@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.FirebaseDatabase
 import com.hfad.korkortsapp.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), LoginFragment.Listener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var quizModelList: MutableList<QuizModel>
@@ -22,29 +22,21 @@ class MainActivity : AppCompatActivity() {
         quizModelList = mutableListOf()
         getDataFromFirebase()
 
-        // Visa login som första skärm när appen startar
+        UserSession.clear(this)
         binding.contentLayout.visibility = View.GONE
-        openFragment(LoginFragment {
-            // När användaren sparat namn:
-            showHome()
-        })
+        openFragment(LoginFragment())
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
-
-                R.id.home -> {
-                    showHome()
-                    true
-                }
-
-                R.id.leaderboard -> {
-                    showLeaderboard()
-                    true
-                }
-
+                R.id.home -> { showHome(); true }
+                R.id.leaderboard -> { showLeaderboard(); true }
                 else -> false
             }
         }
+    }
+
+    override fun onLoggedIn() {
+        showHome()
     }
 
     private fun setUpRecyclerView() {
@@ -62,9 +54,7 @@ class MainActivity : AppCompatActivity() {
                 if (dataSnapshot.exists()) {
                     for (snapshot in dataSnapshot.children) {
                         val quizModel = snapshot.getValue(QuizModel::class.java)
-                        if (quizModel != null) {
-                            quizModelList.add(quizModel)
-                        }
+                        if (quizModel != null) quizModelList.add(quizModel)
                     }
                 }
                 setUpRecyclerView()
@@ -73,11 +63,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun showHome() {
         binding.contentLayout.visibility = View.VISIBLE
-
         supportFragmentManager.findFragmentById(R.id.fragmentContainer)?.let {
-            supportFragmentManager.beginTransaction()
-                .remove(it)
-                .commit()
+            supportFragmentManager.beginTransaction().remove(it).commit()
         }
     }
 

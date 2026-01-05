@@ -8,10 +8,15 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.firebase.database.FirebaseDatabase
 
-class LoginFragment(
-    private val onLoggedIn: () -> Unit
-) : Fragment() {
+class LoginFragment : Fragment() {
+
+    interface Listener {
+        fun onLoggedIn()
+    }
+
+    private val db by lazy { FirebaseDatabase.getInstance().reference }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,20 +26,91 @@ class LoginFragment(
         val view = inflater.inflate(R.layout.fragment_login, container, false)
 
         val usernameInput = view.findViewById<EditText>(R.id.usernameInput)
-        val saveBtn = view.findViewById<Button>(R.id.saveUsernameBtn)
+        val passwordInput = view.findViewById<EditText>(R.id.passwordInput)
+        val loginBtn = view.findViewById<Button>(R.id.loginBtn)
+        val registerBtn = view.findViewById<Button>(R.id.registerBtn)
 
-        saveBtn.setOnClickListener {
-            val name = usernameInput.text?.toString()?.trim().orEmpty()
-            if (name.isBlank()) {
-                Toast.makeText(requireContext(), "Skriv ett användarnamn", Toast.LENGTH_SHORT).show()
+        loginBtn.setOnClickListener {
+            val username = normalize(usernameInput.text?.toString().orEmpty())
+            val pass = passwordInput.text?.toString().orEmpty()
+
+            if (username.isBlank() || pass.isBlank()) {
+                toast("Fyll i användarnamn och lösenord")
                 return@setOnClickListener
             }
 
-            UserSession.setUsername(requireContext(), name)
-            UserSession.getOrCreateUserId(requireContext()) // säkerställ stabilt userId
-            onLoggedIn()
+            login(username, pass)
+        }
+
+        registerBtn.setOnClickListener {
+            val username = normalize(usernameInput.text?.toString().orEmpty())
+            val pass = passwordInput.text?.toString().orEmpty()
+
+            if (username.isBlank() || pass.isBlank()) {
+                toast("Fyll i användarnamn och lösenord")
+                return@setOnClickListener
+            }
+
+            register(username, pass)
         }
 
         return view
+    }
+
+    private fun register(username: String, password: String) {
+        val ref = db.child("simpleUsers").child(username)
+
+        ref.get().addOnSuccessListener { snap ->
+            if (snap.exists()) {
+                toast("Användarnamn finns redan")
+                return@addOnSuccessListener
+            }
+
+            val data = mapOf(
+                "password" to password,
+                "createdAt" to System.currentTimeMillis()
+            )
+
+            ref.setValue(data)
+                .addOnSuccessListener {
+                    UserSession.setUsername(requireContext(), username)
+                    toast("Konto skapat!")
+                    (activity as? Listener)?.onLoggedIn()
+                }
+                .addOnFailureListener { e ->
+                    toast("Kunde inte skapa konto: ${e.message}")
+                }
+        }.addOnFailureListener { e ->
+            toast("Fel: ${e.message}")
+        }
+    }
+
+    private fun login(username: String, password: String) {
+        val ref = db.child("simpleUsers").child(username)
+
+        ref.get().addOnSuccessListener { snap ->
+            if (!snap.exists()) {
+                toast("Kontot finns inte")
+                return@addOnSuccessListener
+            }
+
+            val saved = snap.child("password").getValue(String::class.java)
+            if (saved == password) {
+                UserSession.setUsername(requireContext(), username)
+                toast("Inloggad!")
+                (activity as? Listener)?.onLoggedIn()
+            } else {
+                toast("Fel lösenord")
+            }
+        }.addOnFailureListener { e ->
+            toast("Fel: ${e.message}")
+        }
+    }
+
+    private fun normalize(raw: String): String =
+        raw.trim().lowercase().replace(" ", "")
+
+    private fun toast(msg: String) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
     }
 }
