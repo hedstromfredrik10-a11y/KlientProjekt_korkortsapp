@@ -5,11 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.hfad.korkortsapp.LeaderBoardItem
 import com.hfad.korkortsapp.R
 
 class LeaderBoardAdapter(
-    private val items: List<LeaderBoardItem>
+    private val items: List<LeaderboardModel>
 ) : RecyclerView.Adapter<LeaderBoardAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -25,7 +24,7 @@ class LeaderBoardAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        holder.userNameText.text = item.userName
+        holder.userNameText.text = item.username
         holder.userScoreText.text = "${item.score} poäng"
     }
 

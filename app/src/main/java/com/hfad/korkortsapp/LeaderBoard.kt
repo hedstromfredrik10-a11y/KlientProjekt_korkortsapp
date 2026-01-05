@@ -40,8 +40,8 @@ class LeaderBoard : Fragment() {
             quizId = QUIZ_ID,
             onUpdate = { pairs ->
                 val items = pairs.map { (_, model) ->
-                    LeaderBoardItem(
-                        userName = model.username.ifBlank { "Okänd" },
+                    LeaderboardModel(
+                        username = model.username.ifBlank { "Okänd" },
                         score = model.score
                     )
                 }
