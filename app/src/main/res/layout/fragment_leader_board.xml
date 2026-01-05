@@ -6,12 +6,11 @@
     android:layout_height="match_parent"
     android:background="#ECEFF4">
 
-    <!-- Titel -->
     <TextView
         android:id="@+id/leaderboardTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="🏆 Leaderboard"
+        android:text="@string/leaderboard"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="#1F2937"
@@ -20,7 +19,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Kort runt listan -->
     <androidx.cardview.widget.CardView
         android:id="@+id/leaderboardCard"
         android:layout_width="0dp"
