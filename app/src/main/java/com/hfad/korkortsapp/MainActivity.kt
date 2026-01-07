@@ -29,8 +29,18 @@ class MainActivity : AppCompatActivity(), LoginFragment.Listener {
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.home -> { showHome(); true }
-                R.id.leaderboard -> { showLeaderboard(); true }
+                R.id.home -> {
+                    showHome(); true
+                }
+
+                R.id.leaderboard -> {
+                    showLeaderboard(); true
+                }
+
+                R.id.logout -> {
+                    showLogin(); true
+                }
+
                 else -> false
             }
         }
@@ -73,6 +83,13 @@ class MainActivity : AppCompatActivity(), LoginFragment.Listener {
     private fun showLeaderboard() {
         binding.contentLayout.visibility = View.GONE
         openFragment(LeaderBoard())
+    }
+
+    private fun showLogin() {
+        UserSession.clear(this)
+        binding.contentLayout.visibility = View.GONE
+        binding.bottomNavigation.visibility = View.GONE
+        openFragment(LoginFragment())
     }
 
     private fun openFragment(fragment: Fragment) {
