@@ -137,13 +137,27 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         val username = UserSession.getUsername(this) ?: "okand"
         val userId = username
 
-        repo.saveQuizResult(
+        repo.getUserHighScore(
             quizId = quizId,
             userId = userId,
-            username = username,
-            score = score,
-            onSuccess = { Log.d("QUIZ", "Resultat sparat") },
-            onError = { Log.e("QUIZ", "Kunde inte spara: ${it.message}") }
+            onSuccess = { currentHighScore ->
+                // Spara bara om score är större
+                if (score > currentHighScore) {
+                    repo.saveQuizResult(
+                        quizId = quizId,
+                        userId = userId,
+                        username = username,
+                        score = score,
+                        onSuccess = { Log.d("QUIZ", "Ny highscore sparad: $score (gammal: $currentHighScore)") },
+                        onError = { Log.e("QUIZ", "Kunde inte spara: ${it.message}") }
+                    )
+                } else {
+                    Log.d("QUIZ", "Inte sparat. Score=$score, highscore=$currentHighScore")
+                }
+            },
+            onError = { e ->
+                Log.e("QUIZ", "Kunde inte hämta highscore: ${e.message}")
+            }
         )
 
         val dialogBinding = ScoreDialogBinding.inflate(layoutInflater)

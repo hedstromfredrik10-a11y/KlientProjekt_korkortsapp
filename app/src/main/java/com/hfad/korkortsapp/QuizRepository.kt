@@ -89,4 +89,24 @@ class QuizRepository {
             .orderByChild("score")
             .limitToLast(10)
     }
+
+    fun getUserHighScore(
+        quizId: String,
+        userId: String,
+        onSuccess: (Int) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        db.child("quizResults")
+            .child(quizId)
+            .child(userId)
+            .child("score")
+            .get()
+            .addOnSuccessListener { snapshot ->
+                val highScore = snapshot.getValue(Int::class.java) ?: 0
+                onSuccess(highScore)
+            }
+            .addOnFailureListener { e ->
+                onError(e)
+            }
+    }
 }
