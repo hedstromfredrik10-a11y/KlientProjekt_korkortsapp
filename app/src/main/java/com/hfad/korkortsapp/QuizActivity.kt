@@ -11,23 +11,50 @@ import androidx.appcompat.app.AppCompatActivity
 import com.hfad.korkortsapp.databinding.ActivityQuizBinding
 import com.hfad.korkortsapp.databinding.ScoreDialogBinding
 
+/**
+ * Aktivitet som hanterar genomförandet av ett quiz.
+ *
+ * Visar frågor, svarsalternativ, timer och räknar poäng.
+ * När quizet är klart visas en resultatdialog och eventuell highscore
+ * sparas via [QuizRepository].
+ */
 class QuizActivity : AppCompatActivity(), View.OnClickListener {
 
+    /** Repository som används för att spara och hämta quizresultat. */
     private val repo = QuizRepository()
+
+    /** ID för quizet som körs (hämtas från Intent). */
     private var quizId: String = ""
 
     companion object {
+        /** Lista med frågor i quizet. */
         var questionModelList: List<QuestionModel> = listOf()
+
+        /** Tid för quizet i minuter (som sträng). */
         var time: String = ""
     }
 
+    /** ViewBinding för activity_quiz.xml. */
     private lateinit var binding: ActivityQuizBinding
 
+    /** Index för aktuell fråga. */
     private var currentQuestionIndex = 0
+
+    /** Det svar som användaren valt på aktuell fråga. */
     private var selectedAnswer = ""
+
+    /** Antal korrekta svar. */
     private var score = 0
+
+    /**
+     * Sparar 1 (rätt) eller 0 (fel) för varje besvarad fråga.
+     * Används när man går tillbaka för att justera poängen korrekt.
+     */
     private val list = mutableListOf<Int>()
 
+    /**
+     * Initierar UI, kopplar klicklyssnare, laddar första frågan och startar timer.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         quizId = intent.getStringExtra("QUIZ_ID") ?: ""
@@ -47,30 +74,41 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         startTimer()
     }
 
+    /**
+     * Startar en nedräkning baserat på [time] (minuter).
+     * När tiden blir 00:00 avslutas quizet.
+     */
     private fun startTimer() {
         val totalMineInMillis = time.toInt() * 60 * 1000L
         object : CountDownTimer(totalMineInMillis, 1000L) {
+
             override fun onTick(millisUntilFinished: Long) {
                 val seconds = millisUntilFinished / 1000
                 val minutes = seconds / 60
                 val remainingSeconds = seconds % 60
+
                 binding.timerIndicatorTextview.text =
                     String.format("%02d:%02d", minutes, remainingSeconds)
-                var tiden = binding.timerIndicatorTextview.text
-                if(tiden == "00:00") {
+
+                if (binding.timerIndicatorTextview.text == "00:00") {
                     finishQuiz()
                 }
             }
 
             override fun onFinish() {
-                // valfritt: auto-avsluta quiz här
+                // Valfritt: auto-avsluta quiz här
                 // finishQuiz()
             }
         }.start()
     }
 
+    /**
+     * Visar aktuell fråga och svarsalternativ.
+     * Om alla frågor är slut avslutas quizet.
+     */
     private fun loadQuestions() {
         selectedAnswer = ""
+
         if (currentQuestionIndex == questionModelList.size) {
             finishQuiz()
             return
@@ -91,6 +129,13 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    /**
+     * Hanterar klick på svarsknappar samt Nästa/Tillbaka.
+     *
+     * - Svarsknapp: markerar valt svar.
+     * - Nästa: kontrollerar om svaret är rätt och går vidare.
+     * - Tillbaka: går tillbaka en fråga och justerar poängen om det behövs.
+     */
     override fun onClick(view: View?) {
         binding.apply {
             btn0.setBackgroundColor(getColor(R.color.gray))
@@ -130,6 +175,9 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         Log.i("Poäng", currentQuestionIndex.toString())
     }
 
+    /**
+     * Avslutar quizet, visar resultatdialog och sparar highscore om den är bättre.
+     */
     private fun finishQuiz() {
         val totalQuestions = questionModelList.size
         val percentage = ((score.toFloat() / totalQuestions.toFloat()) * 100).toInt()
@@ -148,8 +196,12 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
                         userId = userId,
                         username = username,
                         score = score,
-                        onSuccess = { Log.d("QUIZ", "Ny highscore sparad: $score (gammal: $currentHighScore)") },
-                        onError = { Log.e("QUIZ", "Kunde inte spara: ${it.message}") }
+                        onSuccess = {
+                            Log.d("QUIZ", "Ny highscore sparad: $score (gammal: $currentHighScore)")
+                        },
+                        onError = {
+                            Log.e("QUIZ", "Kunde inte spara: ${it.message}")
+                        }
                     )
                 } else {
                     Log.d("QUIZ", "Inte sparat. Score=$score, highscore=$currentHighScore")
@@ -165,8 +217,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
             scoreProgressIndicator.progress = percentage
             scoreProgressText.text = "$percentage %"
 
-            var tiden = binding.timerIndicatorTextview.text
-            if(tiden == "00:00") {
+            if (binding.timerIndicatorTextview.text == "00:00") {
                 scoreTitle.text = "Tiden gick ut"
                 scoreTitle.setTextColor(Color.RED)
             }
@@ -188,5 +239,4 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
             .setCancelable(false)
             .show()
     }
-
 }

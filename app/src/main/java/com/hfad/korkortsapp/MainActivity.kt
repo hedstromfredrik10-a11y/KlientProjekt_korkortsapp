@@ -8,12 +8,40 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.FirebaseDatabase
 import com.hfad.korkortsapp.databinding.ActivityMainBinding
 
+/**
+ * Huvudaktivitet för applikationen.
+ *
+ * Ansvarar för:
+ * - Inloggningsflödet
+ * - Navigering mellan startsida och leaderboard
+ * - Hämtning och visning av quiz-data från Firebase
+ *
+ * Aktiviteten implementerar [LoginFragment.Listener] för att
+ * reagera på lyckad inloggning.
+ */
 class MainActivity : AppCompatActivity(), LoginFragment.Listener {
 
+    /**
+     * ViewBinding för activity_main.xml.
+     */
     private lateinit var binding: ActivityMainBinding
+
+    /**
+     * Lista med quiz som hämtas från Firebase.
+     */
     private lateinit var quizModelList: MutableList<QuizModel>
+
+    /**
+     * Adapter som används för att visa quiz-listan i RecyclerView.
+     */
     private lateinit var adapter: QuizListAdapter
 
+    /**
+     * Anropas när aktiviteten skapas.
+     *
+     * Initierar UI, laddar quiz-data, rensar eventuell användarsession
+     * och visar inloggningsfragmentet.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -46,16 +74,30 @@ class MainActivity : AppCompatActivity(), LoginFragment.Listener {
         }
     }
 
+    /**
+     * Anropas när användaren har loggat in via [LoginFragment].
+     *
+     * Visar startsidan med quiz-listan.
+     */
     override fun onLoggedIn() {
         showHome()
     }
 
+    /**
+     * Initierar RecyclerView för att visa quiz-listan.
+     */
     private fun setUpRecyclerView() {
         adapter = QuizListAdapter(quizModelList)
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
     }
 
+    /**
+     * Hämtar quiz-data från Firebase Realtime Database.
+     *
+     * Data hämtas från noden "quizes" och omvandlas till en lista
+     * av [QuizModel]-objekt.
+     */
     private fun getDataFromFirebase() {
         FirebaseDatabase.getInstance()
             .getReference("quizes")
@@ -72,6 +114,9 @@ class MainActivity : AppCompatActivity(), LoginFragment.Listener {
             }
     }
 
+    /**
+     * Visar startsidan med quiz-listan och bottennavigeringen.
+     */
     private fun showHome() {
         binding.contentLayout.visibility = View.VISIBLE
         binding.bottomNavigation.visibility = View.VISIBLE
@@ -80,11 +125,21 @@ class MainActivity : AppCompatActivity(), LoginFragment.Listener {
         }
     }
 
+    /**
+     * Visar leaderboard-fragmentet.
+     *
+     * Döljer quiz-listan och öppnar [LeaderBoard].
+     */
     private fun showLeaderboard() {
         binding.contentLayout.visibility = View.GONE
         openFragment(LeaderBoard())
     }
 
+    /**
+     * Loggar ut användaren och visar inloggningsfragmentet.
+     *
+     * Rensar sparad användarsession och döljer navigation.
+     */
     private fun showLogin() {
         UserSession.clear(this)
         binding.contentLayout.visibility = View.GONE
@@ -92,6 +147,11 @@ class MainActivity : AppCompatActivity(), LoginFragment.Listener {
         openFragment(LoginFragment())
     }
 
+    /**
+     * Byter fragment i fragment-containern.
+     *
+     * @param fragment Fragmentet som ska visas.
+     */
     private fun openFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, fragment)

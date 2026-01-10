@@ -10,14 +10,37 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.database.FirebaseDatabase
 
+/**
+ * Fragment som hanterar inloggning och registrering av användare.
+ *
+ * Användardata lagras i Firebase Realtime Database under noden "simpleUsers".
+ * Vid lyckad inloggning eller registrering sparas användarnamnet lokalt via
+ * [UserSession] och värd-aktiviteten notifieras.
+ */
 class LoginFragment : Fragment() {
 
+    /**
+     * Interface som används för att kommunicera med värd-aktiviteten
+     * när användaren har loggat in eller registrerat sig.
+     */
     interface Listener {
+        /**
+         * Anropas när användaren är korrekt inloggad.
+         */
         fun onLoggedIn()
     }
 
+    /**
+     * Referens till Firebase Realtime Database.
+     */
     private val db by lazy { FirebaseDatabase.getInstance().reference }
 
+    /**
+     * Skapar och returnerar fragmentets vy.
+     *
+     * Initierar inmatningsfält för användarnamn och lösenord samt
+     * knappar för inloggning och registrering.
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,6 +80,15 @@ class LoginFragment : Fragment() {
         return view
     }
 
+    /**
+     * Registrerar en ny användare i Firebase.
+     *
+     * Kontrollerar först om användarnamnet redan finns.
+     * Om det är ledigt sparas användarnamn, lösenord och skapandedatum.
+     *
+     * @param username Användarens valda användarnamn.
+     * @param password Användarens lösenord.
+     */
     private fun register(username: String, password: String) {
         val ref = db.child("simpleUsers").child(username)
 
@@ -85,6 +117,15 @@ class LoginFragment : Fragment() {
         }
     }
 
+    /**
+     * Loggar in en befintlig användare.
+     *
+     * Hämtar användardata från Firebase och jämför sparat lösenord
+     * med det lösenord som användaren angivit.
+     *
+     * @param username Användarnamnet som ska loggas in.
+     * @param password Lösenordet som ska verifieras.
+     */
     private fun login(username: String, password: String) {
         val ref = db.child("simpleUsers").child(username)
 
@@ -107,9 +148,23 @@ class LoginFragment : Fragment() {
         }
     }
 
+    /**
+     * Normaliserar användarnamn genom att:
+     * - ta bort mellanslag
+     * - trimma blanksteg
+     * - konvertera till små bokstäver
+     *
+     * @param raw Ursprunglig text från inmatningsfältet.
+     * @return Normaliserat användarnamn.
+     */
     private fun normalize(raw: String): String =
         raw.trim().lowercase().replace(" ", "")
 
+    /**
+     * Visar ett kort Toast-meddelande.
+     *
+     * @param msg Text som ska visas för användaren.
+     */
     private fun toast(msg: String) {
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
     }

@@ -2,10 +2,30 @@ package com.hfad.korkortsapp
 
 import com.google.firebase.database.*
 
+/**
+ * Repository-klass som hanterar all kommunikation med Firebase
+ * kopplat till quizresultat och leaderboard.
+ */
 class QuizRepository {
 
+    /**
+     * Referens till Firebase Realtime Database.
+     */
     private val db: DatabaseReference = FirebaseDatabase.getInstance().reference
 
+    /**
+     * Sparar ett quizresultat för en användare.
+     *
+     * Resultatet sparas under:
+     * quizResults/{quizId}/{userId}
+     *
+     * @param quizId ID för quizet.
+     * @param userId Användarens unika ID (användarnamn).
+     * @param username Användarens namn som visas i leaderboard.
+     * @param score Användarens poäng.
+     * @param onSuccess Callback som anropas vid lyckad lagring.
+     * @param onError Callback som anropas vid fel.
+     */
     fun saveQuizResult(
         quizId: String,
         userId: String,
@@ -28,6 +48,16 @@ class QuizRepository {
             .addOnFailureListener { onError(it) }
     }
 
+    /**
+     * Lyssnar på och hämtar Top 10-resultat för ett quiz.
+     *
+     * Resultaten sorteras lokalt i fallande ordning baserat på poäng.
+     *
+     * @param quizId ID för quizet.
+     * @param onUpdate Callback som anropas när data uppdateras.
+     * @param onError Callback som anropas vid databasfel.
+     * @return En [ValueEventListener] som kan tas bort vid behov.
+     */
     fun listenTop10(
         quizId: String,
         onUpdate: (List<Pair<String, LeaderboardModel>>) -> Unit,
@@ -58,6 +88,13 @@ class QuizRepository {
         return listener
     }
 
+    /**
+     * Skapar en Firebase-query som hämtar de 10 högsta poängen
+     * för ett specifikt quiz.
+     *
+     * @param quizId ID för quizet.
+     * @return Firebase-query för Top 10.
+     */
     private fun top10Query(quizId: String): Query {
         return db.child("quizResults")
             .child(quizId)
@@ -65,6 +102,14 @@ class QuizRepository {
             .limitToLast(10)
     }
 
+    /**
+     * Hämtar användarens tidigare högsta poäng för ett quiz.
+     *
+     * @param quizId ID för quizet.
+     * @param userId Användarens ID.
+     * @param onSuccess Callback som returnerar highscore.
+     * @param onError Callback som anropas vid fel.
+     */
     fun getUserHighScore(
         quizId: String,
         userId: String,
