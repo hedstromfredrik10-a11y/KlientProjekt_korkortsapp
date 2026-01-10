@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
  * RecyclerView-adapter som används för att visa en leaderboard med användarnamn
  * och poäng.
  *
- * @param items Lista med [LeaderboardModel] som representerar leaderboardens rader.
+ * @author Fredrik, Matias, Desbele, Kacper
  */
 class LeaderBoardAdapter(
     private val items: List<LeaderboardModel>
@@ -18,7 +18,6 @@ class LeaderBoardAdapter(
 
     /**
      * ViewHolder som håller referenser till vyerna i varje leaderboard-rad.
-     *
      * @param view Den inflaterade vyn för ett leaderboard-item.
      */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -35,7 +34,7 @@ class LeaderBoardAdapter(
     }
 
     /**
-     * Skapar och returnerar en ny [ViewHolder] genom att inflatera
+     * Skapar och returnerar en ny ViewHolder genom att inflatera
      * layouten för ett leaderboard-item.
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -45,7 +44,7 @@ class LeaderBoardAdapter(
     }
 
     /**
-     * Binder data från ett [LeaderboardModel] till en [ViewHolder].
+     * Binder data från ett LeaderboardModel till en ViewHolder.
      *
      * @param holder ViewHolder som ska uppdateras.
      * @param position Positionen i listan som ska visas.

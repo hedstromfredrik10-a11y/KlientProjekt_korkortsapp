@@ -11,15 +11,16 @@ import kotlin.jvm.java
  * RecyclerView-adapter som visar en lista med tillgängliga quiz.
  *
  * Varje rad innehåller titel, beskrivning och tidsgräns för ett quiz.
- * När användaren klickar på ett quiz startas [QuizActivity].
+ * När användaren klickar på ett quiz startas QuizActivity.
  *
  * @param quizModelList Lista med quiz som ska visas.
+ * @author Fredrik, Matias, Desbele, Kacper
  */
 class QuizListAdapter(private val quizModelList: List<QuizModel>) :
     RecyclerView.Adapter<QuizListAdapter.MyViewHolder>() {
 
     /**
-     * ViewHolder som ansvarar för att binda ett [QuizModel] till layouten.
+     * ViewHolder som ansvarar för att binda ett QuizModel till layouten.
      */
     class MyViewHolder(private val binding: QuizItemRecyclerRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -27,7 +28,7 @@ class QuizListAdapter(private val quizModelList: List<QuizModel>) :
         /**
          * Binder data från ett quiz till vyerna i listan.
          *
-         * Sätter titel, undertitel och tid samt startar [QuizActivity]
+         * Sätter titel, undertitel och tid samt startar QuizActivity
          * när användaren klickar på raden.
          *
          * @param model Quiz som ska visas i raden.
@@ -49,7 +50,7 @@ class QuizListAdapter(private val quizModelList: List<QuizModel>) :
     }
 
     /**
-     * Skapar och returnerar en ny [MyViewHolder].
+     * Skapar och returnerar en ny MyViewHolder.
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding =

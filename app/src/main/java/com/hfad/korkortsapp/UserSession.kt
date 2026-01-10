@@ -5,8 +5,7 @@ import android.content.Context
 /**
  * Objekt som hanterar användarens inloggningssession lokalt.
  *
- * Informationen sparas i SharedPreferences och används för att
- * hålla reda på vilken användare som är inloggad.
+ * @author Fredrik, Matias, Desbele, Kacper
  */
 object UserSession {
 

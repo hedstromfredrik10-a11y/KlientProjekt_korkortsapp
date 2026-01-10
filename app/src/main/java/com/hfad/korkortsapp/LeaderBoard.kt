@@ -10,10 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.ValueEventListener
 
 /**
- * Fragment som visar en leaderboard (Top 10) för ett specifikt quiz.
+ * Fragment som visar en leaderboard (Top 10) för slutprovet.
  *
- * Leaderboarden hämtas från Firebase via [QuizRepository] och visas i en
- * [RecyclerView]. Varje rad innehåller användarnamn och poäng.
+ * Leaderboarden hämtas från Firebase och visas i en
+ * RecyclerView. Varje rad innehåller användarnamn och poäng.
+ * @author Fredrik, Matias, Desbele, Kacper
  */
 class LeaderBoard : Fragment() {
 
@@ -23,8 +24,7 @@ class LeaderBoard : Fragment() {
     private val repo = QuizRepository()
 
     /**
-     * Listener som används för att lyssna på uppdateringar av Top 10-resultat
-     * i Firebase. Sparas för att kunna tas bort vid behov.
+     * Listener som används för att lyssna på uppdateringar av Top 10-resultat.
      */
     private var top10Listener: ValueEventListener? = null
 
@@ -35,15 +35,11 @@ class LeaderBoard : Fragment() {
 
     /**
      * ID för quizet vars leaderboard ska visas.
-     *
-     * OBS: Ändra detta värde om ditt quiz använder ett annat ID.
      */
     private val QUIZ_ID = "1"
 
     /**
      * Skapar och returnerar fragmentets vy.
-     *
-     * Initierar RecyclerView med en [LinearLayoutManager] och en tom adapter.
      */
     override fun onCreateView(
         inflater: LayoutInflater,

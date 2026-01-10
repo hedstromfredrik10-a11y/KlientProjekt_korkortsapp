@@ -5,6 +5,7 @@ import com.google.firebase.database.*
 /**
  * Repository-klass som hanterar all kommunikation med Firebase
  * kopplat till quizresultat och leaderboard.
+ * @author Fredrik, Matias, Desbele, Kacper
  */
 class QuizRepository {
 
@@ -15,9 +16,6 @@ class QuizRepository {
 
     /**
      * Sparar ett quizresultat för en användare.
-     *
-     * Resultatet sparas under:
-     * quizResults/{quizId}/{userId}
      *
      * @param quizId ID för quizet.
      * @param userId Användarens unika ID (användarnamn).

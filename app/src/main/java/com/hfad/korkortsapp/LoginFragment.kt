@@ -13,9 +13,7 @@ import com.google.firebase.database.FirebaseDatabase
 /**
  * Fragment som hanterar inloggning och registrering av användare.
  *
- * Användardata lagras i Firebase Realtime Database under noden "simpleUsers".
- * Vid lyckad inloggning eller registrering sparas användarnamnet lokalt via
- * [UserSession] och värd-aktiviteten notifieras.
+ * @author Fredrik, Matias, Desbele, Kacper
  */
 class LoginFragment : Fragment() {
 
@@ -38,8 +36,7 @@ class LoginFragment : Fragment() {
     /**
      * Skapar och returnerar fragmentets vy.
      *
-     * Initierar inmatningsfält för användarnamn och lösenord samt
-     * knappar för inloggning och registrering.
+     * Initierar inmatningsfält för användarnamn och lösenord
      */
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -149,10 +146,7 @@ class LoginFragment : Fragment() {
     }
 
     /**
-     * Normaliserar användarnamn genom att:
-     * - ta bort mellanslag
-     * - trimma blanksteg
-     * - konvertera till små bokstäver
+     * Normaliserar användarnamn
      *
      * @param raw Ursprunglig text från inmatningsfältet.
      * @return Normaliserat användarnamn.

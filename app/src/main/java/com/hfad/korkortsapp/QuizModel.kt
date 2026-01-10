@@ -5,6 +5,7 @@ package com.hfad.korkortsapp
  *
  * Innehåller information om quizets ID, titel, beskrivning,
  * tidsgräns samt en lista med tillhörande frågor.
+ * @author Fredrik, Matias, Desbele, Kacper
  */
 data class QuizModel(
     val id: String,

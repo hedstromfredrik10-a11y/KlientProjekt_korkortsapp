@@ -16,8 +16,7 @@ import com.hfad.korkortsapp.databinding.ActivityMainBinding
  * - Navigering mellan startsida och leaderboard
  * - Hämtning och visning av quiz-data från Firebase
  *
- * Aktiviteten implementerar [LoginFragment.Listener] för att
- * reagera på lyckad inloggning.
+ * @author Fredrik, Matias, Desbele, Kacper
  */
 class MainActivity : AppCompatActivity(), LoginFragment.Listener {
 
@@ -75,9 +74,8 @@ class MainActivity : AppCompatActivity(), LoginFragment.Listener {
     }
 
     /**
-     * Anropas när användaren har loggat in via [LoginFragment].
-     *
-     * Visar startsidan med quiz-listan.
+     * Anropas när användaren har loggat in via LoginFragment och
+     * visar startsidan med quiz-listan.
      */
     override fun onLoggedIn() {
         showHome()
@@ -96,7 +94,7 @@ class MainActivity : AppCompatActivity(), LoginFragment.Listener {
      * Hämtar quiz-data från Firebase Realtime Database.
      *
      * Data hämtas från noden "quizes" och omvandlas till en lista
-     * av [QuizModel]-objekt.
+     * av QuizModel-objekt.
      */
     private fun getDataFromFirebase() {
         FirebaseDatabase.getInstance()
@@ -128,7 +126,7 @@ class MainActivity : AppCompatActivity(), LoginFragment.Listener {
     /**
      * Visar leaderboard-fragmentet.
      *
-     * Döljer quiz-listan och öppnar [LeaderBoard].
+     * Döljer quiz-listan och öppnar LeaderBoard.
      */
     private fun showLeaderboard() {
         binding.contentLayout.visibility = View.GONE

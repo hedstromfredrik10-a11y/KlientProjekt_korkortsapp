@@ -14,9 +14,7 @@ import com.hfad.korkortsapp.databinding.ScoreDialogBinding
 /**
  * Aktivitet som hanterar genomförandet av ett quiz.
  *
- * Visar frågor, svarsalternativ, timer och räknar poäng.
- * När quizet är klart visas en resultatdialog och eventuell highscore
- * sparas via [QuizRepository].
+ * @author Fredrik, Matias, Desbele, Kacper
  */
 class QuizActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -75,7 +73,7 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     /**
-     * Startar en nedräkning baserat på [time] (minuter).
+     * Startar en nedräkning baserat på time (minuter).
      * När tiden blir 00:00 avslutas quizet.
      */
     private fun startTimer() {
@@ -185,32 +183,26 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
         val username = UserSession.getUsername(this) ?: "okand"
         val userId = username
 
-        repo.getUserHighScore(
-            quizId = quizId,
-            userId = userId,
-            onSuccess = { currentHighScore ->
-                // Spara bara om score är större
-                if (score > currentHighScore) {
-                    repo.saveQuizResult(
-                        quizId = quizId,
-                        userId = userId,
-                        username = username,
-                        score = score,
-                        onSuccess = {
-                            Log.d("QUIZ", "Ny highscore sparad: $score (gammal: $currentHighScore)")
-                        },
-                        onError = {
-                            Log.e("QUIZ", "Kunde inte spara: ${it.message}")
-                        }
-                    )
-                } else {
-                    Log.d("QUIZ", "Inte sparat. Score=$score, highscore=$currentHighScore")
-                }
-            },
-            onError = { e ->
-                Log.e("QUIZ", "Kunde inte hämta highscore: ${e.message}")
+        repo.getUserHighScore(quizId = quizId, userId = userId, onSuccess = { currentHighScore ->
+            // Spara bara om score är större
+            if (score > currentHighScore) {
+                repo.saveQuizResult(
+                    quizId = quizId,
+                    userId = userId,
+                    username = username,
+                    score = score,
+                    onSuccess = {
+                        Log.d("QUIZ", "Ny highscore sparad: $score (gammal: $currentHighScore)")
+                    },
+                    onError = {
+                        Log.e("QUIZ", "Kunde inte spara: ${it.message}")
+                    })
+            } else {
+                Log.d("QUIZ", "Inte sparat. Score=$score, highscore=$currentHighScore")
             }
-        )
+        }, onError = { e ->
+            Log.e("QUIZ", "Kunde inte hämta highscore: ${e.message}")
+        })
 
         val dialogBinding = ScoreDialogBinding.inflate(layoutInflater)
         dialogBinding.apply {
@@ -234,9 +226,6 @@ class QuizActivity : AppCompatActivity(), View.OnClickListener {
             finishBtn.setOnClickListener { finish() }
         }
 
-        AlertDialog.Builder(this)
-            .setView(dialogBinding.root)
-            .setCancelable(false)
-            .show()
+        AlertDialog.Builder(this).setView(dialogBinding.root).setCancelable(false).show()
     }
 }
