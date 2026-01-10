@@ -1,7 +1,5 @@
 package com.hfad.korkortsapp
 
-import java.sql.Timestamp
-
 data class LeaderboardModel(
     val username: String = "",
     val score: Int = 0,

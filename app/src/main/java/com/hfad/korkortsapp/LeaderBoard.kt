@@ -50,8 +50,5 @@ class LeaderBoard : Fragment() {
         )
     }
 
-    override fun onStop() {
-        super.onStop()
-    }
 }
 

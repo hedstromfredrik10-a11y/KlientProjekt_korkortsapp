@@ -20,9 +20,6 @@ object UserSession {
             ?.takeIf { it.isNotBlank() }
     }
 
-    fun isLoggedIn(context: Context): Boolean =
-        getUsername(context) != null
-
     fun clear(context: Context) {
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
             .edit()

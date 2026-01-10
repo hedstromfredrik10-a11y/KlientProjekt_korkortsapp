@@ -1,6 +1,5 @@
 package com.hfad.korkortsapp
 
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
 class QuizRepository {
@@ -57,30 +56,6 @@ class QuizRepository {
 
         query.addValueEventListener(listener)
         return listener
-    }
-
-    fun removeTop10Listener(quizId: String, listener: ValueEventListener) {
-        top10Query(quizId).removeEventListener(listener)
-    }
-
-    fun saveQuizResultForCurrentUser(
-        quizId: String,
-        username: String,
-        score: Int,
-        onSuccess: () -> Unit = {},
-        onError: (Exception) -> Unit = {}
-    ) {
-        val uid = FirebaseAuth.getInstance().currentUser?.uid
-            ?: return onError(IllegalStateException("Ingen inloggad user (FirebaseAuth)."))
-
-        saveQuizResult(
-            quizId = quizId,
-            userId = uid,
-            username = username,
-            score = score,
-            onSuccess = onSuccess,
-            onError = onError
-        )
     }
 
     private fun top10Query(quizId: String): Query {
